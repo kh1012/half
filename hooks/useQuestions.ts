@@ -37,7 +37,7 @@ export function useQuestionStats(questionId: string) {
       if (error) throw error
       return data
     },
-    staleTime: 5 * 60 * 1000,
-    refetchInterval: 5 * 60 * 1000,
+    staleTime: 0, // Always consider data stale to allow refetching
+    refetchInterval: 5000, // Refetch every 5 seconds
   })
 }

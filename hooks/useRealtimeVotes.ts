@@ -34,11 +34,18 @@ export function useRealtimeVotes(questionId: string, initialCountA: number = 0, 
           filter: `question_id=eq.${questionId}`,
         },
         (payload) => {
+          console.log('🗳️ Realtime vote event received:', payload)
           const newVote = payload.new as VoteEvent
           const isOptionA = newVote.chosen_option === 'a'
 
-          // Update Tanstack Query cache immediately
+          // 1. Invalidate query to ensure eventual consistency
+          // (This triggers a refetch in the background)
+          queryClient.invalidateQueries({ queryKey: queryKeys.stats(questionId) })
+
+          // 2. Optimistically update Tanstack Query cache immediately for instant feedback
           queryClient.setQueryData(queryKeys.stats(questionId), (old: any) => {
+            console.log('🔄 Updating stats cache:', old)
+            
             // If no data exists yet, construct initial structure using props
             if (!old) {
               return {
@@ -59,7 +66,9 @@ export function useRealtimeVotes(questionId: string, initialCountA: number = 0, 
           })
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log(`🔌 Vote subscription status for ${questionId}:`, status)
+      })
 
     return () => {
       supabase.removeChannel(channel)
