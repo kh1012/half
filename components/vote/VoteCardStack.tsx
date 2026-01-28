@@ -3,10 +3,13 @@
 import { motion } from 'framer-motion'
 import { Question } from '@/lib/types'
 import { VotingCard } from '@/components/VotingCard'
+import { QuestionCreateForm } from '@/components/vote/QuestionCreateForm'
 
 interface VoteCardStackProps {
   unvotedQuestions: Question[]
   onVoteComplete: (questionId: string) => void
+  onPassQuestion?: (questionId: string) => void
+  onQuestionCreated: (question: Question) => void
 }
 
 const getStackTransform = (index: number) => ({
@@ -16,7 +19,7 @@ const getStackTransform = (index: number) => ({
   zIndex: 40 - (index * 10)
 })
 
-export function VoteCardStack({ unvotedQuestions, onVoteComplete }: VoteCardStackProps) {
+export function VoteCardStack({ unvotedQuestions, onVoteComplete, onPassQuestion, onQuestionCreated }: VoteCardStackProps) {
   // Show max 5 cards in stack (current + 1 behind)
   const visibleCards = unvotedQuestions.slice(0, 2);
 
@@ -47,48 +50,67 @@ export function VoteCardStack({ unvotedQuestions, onVoteComplete }: VoteCardStac
         </div>
       )}
 
-      {/* Card Stack Container */}
-      <div style={{ position: 'relative' }}>
-        {/* Render cards in reverse order so the first card is on top */}
-        {[...visibleCards].reverse().map((question, reverseIndex) => {
-          const index = visibleCards.length - 1 - reverseIndex
-          const transform = getStackTransform(index)
-          const isTopCard = index === 0
+      {/* Main Layout: Card Stack + Create Form */}
+      <div style={{ 
+        display: 'flex', 
+        gap: '24px', 
+        alignItems: 'flex-start',
+        flexWrap: 'wrap'
+      }}>
+        {/* Card Stack Container */}
+        <div style={{ position: 'relative', flex: '1 1 auto', minWidth: '280px' }}>
+          {/* Render cards in reverse order so the first card is on top */}
+          {[...visibleCards].reverse().map((question, reverseIndex) => {
+            const index = visibleCards.length - 1 - reverseIndex
+            const transform = getStackTransform(index)
+            const isTopCard = index === 0
 
-          return (
-            <motion.div
-              key={question.id}
-              style={{
-                position: index === 0 ? 'relative' : 'absolute',
-                top: index === 0 ? 0 : -index * 50,
-                left: 0,
-                right: 0,
-                zIndex: transform.zIndex,
-                pointerEvents: isTopCard ? 'auto' : 'none',
-                opacity: index === 0 ? 1 : 0.5,
-              }}
-              initial={false}
-              animate={{
-                y: transform.y,
-                scale: transform.scale,
-                opacity: transform.opacity
-              }}
-              transition={{
-                type: 'spring',
-                stiffness: 400,
-                damping: 30
-              }}
-            >
-              <VotingCard 
-                question={question} 
-                onVoteComplete={() => onVoteComplete(question.id)}
-                forceUnvoted={true}
-                hideComments={true}
-              />
-            </motion.div>
-          )
-        })}
+            return (
+              <motion.div
+                key={question.id}
+                style={{
+                  position: index === 0 ? 'relative' : 'absolute',
+                  top: index === 0 ? 0 : -index * 50,
+                  left: 0,
+                  right: 0,
+                  zIndex: transform.zIndex,
+                  pointerEvents: isTopCard ? 'auto' : 'none',
+                  opacity: index === 0 ? 1 : 0.5,
+                }}
+                initial={false}
+                animate={{
+                  y: transform.y,
+                  scale: transform.scale,
+                  opacity: transform.opacity
+                }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 400,
+                  damping: 30
+                }}
+              >
+                <VotingCard 
+                  question={question} 
+                  onVoteComplete={() => onVoteComplete(question.id)}
+                  onPassQuestion={onPassQuestion ? () => onPassQuestion(question.id) : undefined}
+                  forceUnvoted={true}
+                  hideComments={true}
+                />
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* Question Create Form - Right Side */}
+        <div style={{ 
+          flex: '0 0 auto',
+          position: 'sticky',
+          top: '24px'
+        }}>
+          <QuestionCreateForm onQuestionCreated={onQuestionCreated} />
+        </div>
       </div>
     </div>
   )
 }
+

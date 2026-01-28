@@ -72,49 +72,42 @@ export function AllClear({ onGenerateNew, isGenerating = false }: AllClearProps)
         새로운 질문을 생성하거나 다른 사용자가 질문을 생성할 때까지 기다려보세요
       </p>
 
-      {/* Generate Button */}
+      {/* Generate Button - Icon Only */}
       {onGenerateNew && (
         <motion.button
           onClick={onGenerateNew}
           disabled={isGenerating}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          title="AI가 새 질문을 생성합니다"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
-            padding: '16px 32px',
-            fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
-            fontWeight: 500,
+            justifyContent: 'center',
+            width: '56px',
+            height: '56px',
             color: '#ffffff',
             backgroundColor: '#000000',
             border: '2px solid #000000',
-            borderRadius: '8px',
+            borderRadius: '50%',
             cursor: isGenerating ? 'not-allowed' : 'pointer',
             transition: 'all 0.2s',
             opacity: isGenerating ? 0.6 : 1
           }}
-          className="hover:bg-white hover:text-black"
         >
           {isGenerating ? (
-            <>
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 1,
-                  repeat: Infinity,
-                  ease: 'linear'
-                }}
-              >
-                <Sparkles size={20} />
-              </motion.div>
-              생성 중...
-            </>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                ease: 'linear'
+              }}
+            >
+              <Sparkles size={24} />
+            </motion.div>
           ) : (
-            <>
-              <Sparkles size={20} />
-              새 질문 생성하기
-            </>
+            <Sparkles size={24} />
           )}
         </motion.button>
       )}

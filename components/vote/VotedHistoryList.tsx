@@ -44,36 +44,6 @@ export function VotedHistoryList({ votedQuestions }: VotedHistoryListProps) {
         >
           투표한 질문 ({votedQuestions.length})
         </h2>
-
-        {hasMore && (
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '8px 16px',
-              fontSize: '14px',
-              color: '#6b7280',
-              background: 'transparent',
-              border: '1px solid #e5e7eb',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-            className="hover:bg-gray-50"
-          >
-            {isExpanded ? (
-              <>
-                접기 <ChevronUp size={16} />
-              </>
-            ) : (
-              <>
-                더보기 <ChevronDown size={16} />
-              </>
-            )}
-          </button>
-        )}
       </div>
 
       {/* Voted Cards List */}
@@ -98,19 +68,43 @@ export function VotedHistoryList({ votedQuestions }: VotedHistoryListProps) {
         </AnimatePresence>
       </div>
 
-      {/* Show count when collapsed */}
-      {!isExpanded && hasMore && (
+      {/* More/Less Button at Bottom */}
+      {hasMore && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           style={{
-            marginTop: '16px',
-            textAlign: 'center',
-            fontSize: '14px',
-            color: '#9ca3af'
+            marginTop: '24px',
+            textAlign: 'center'
           }}
         >
-          총 {votedQuestions.length}개의 투표 기록이 있습니다
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '12px 24px',
+              fontSize: '14px',
+              color: '#6b7280',
+              background: 'transparent',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+            className="hover:bg-gray-50"
+          >
+            {isExpanded ? (
+              <>
+                접기 <ChevronUp size={16} />
+              </>
+            ) : (
+              <>
+                더보기 ({votedQuestions.length - 3}개 더) <ChevronDown size={16} />
+              </>
+            )}
+          </button>
         </motion.div>
       )}
     </div>

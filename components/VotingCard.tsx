@@ -17,11 +17,12 @@ import { queryKeys } from '@/lib/queryKeys'
 interface VotingCardProps {
   question: Question
   onVoteComplete?: () => void
+  onPassQuestion?: () => void
   forceUnvoted?: boolean // Force show unvoted UI even if already voted
   hideComments?: boolean // Hide comment section (for unvoted card stack)
 }
 
-export function VotingCard({ question, onVoteComplete, forceUnvoted = false, hideComments = false }: VotingCardProps) {
+export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvoted = false, hideComments = false }: VotingCardProps) {
   const { browserId, hasVoted, recordVote, isInitialized } = useAnonymousUser()
   const { data: stats } = useQuestionStats(question.id)
   const realtimeVotes = useRealtimeVotes(question.id, stats?.count_a || 0, stats?.count_b || 0)
@@ -200,6 +201,27 @@ export function VotingCard({ question, onVoteComplete, forceUnvoted = false, hid
               {question.option_b}
             </button>
           </div>
+          
+          {/* Pass Button */}
+          {onPassQuestion && (
+            <button
+              onClick={onPassQuestion}
+              className="hover:bg-gray-100 transition-colors"
+              style={{
+                marginTop: '16px',
+                padding: '8px 16px',
+                fontSize: '13px',
+                color: '#9ca3af',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                width: '100%',
+                textAlign: 'center'
+              }}
+            >
+              이 질문 건너뛰기 (Pass)
+            </button>
+          )}
         </div>
         {!hideComments && (
           <CommentSection questionId={question.id} voted={voted} isAdmin={isAdmin} />

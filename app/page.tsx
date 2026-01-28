@@ -7,6 +7,7 @@ import { Question } from '@/lib/types'
 import { NicknameModal } from '@/components/NicknameModal'
 import { VoteCardStack } from '@/components/vote/VoteCardStack'
 import { VotedHistoryList } from '@/components/vote/VotedHistoryList'
+import { PassedQuestionsList } from '@/components/vote/PassedQuestionsList'
 import { AllClear } from '@/components/vote/AllClear'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAnonymousUser } from '@/hooks/useAnonymousUser'
@@ -15,7 +16,15 @@ import { generateQuestion } from '@/app/actions/generate-question'
 
 export default function Home() {
   const { data: questions = [], isLoading } = useQuestions()
-  const { hasSetNickname, isInitialized, updateNickname, votedQuestions, recordVote } = useAnonymousUser()
+  const { 
+    hasSetNickname, 
+    isInitialized, 
+    updateNickname, 
+    votedQuestions, 
+    passedQuestions,
+    recordVote, 
+    recordPass 
+  } = useAnonymousUser()
   const queryClient = useQueryClient()
   const [isGenerating, setIsGenerating] = useState(false)
 
@@ -24,11 +33,14 @@ export default function Home() {
     window.location.reload()
   }
 
-  // Split questions into voted and unvoted
-  const { unvotedQuestions, votedQuestionList } = useMemo(() => {
+  // Split questions into voted, unvoted (excluding passed), and passed
+  const { unvotedQuestions, votedQuestionList, passedQuestionList } = useMemo(() => {
     const votedIds = new Set(votedQuestions)
-    const unvoted = questions.filter(q => !votedIds.has(q.id))
+    const passedIds = new Set(passedQuestions)
+    
     const voted = questions.filter(q => votedIds.has(q.id))
+    const unvoted = questions.filter(q => !votedIds.has(q.id) && !passedIds.has(q.id))
+    const passed = questions.filter(q => passedIds.has(q.id) && !votedIds.has(q.id))
     
     // Sort voted questions by vote order (newest first)
     voted.sort((a, b) => {
@@ -39,9 +51,10 @@ export default function Home() {
     
     return {
       unvotedQuestions: unvoted,
-      votedQuestionList: voted
+      votedQuestionList: voted,
+      passedQuestionList: passed
     }
-  }, [questions, votedQuestions])
+  }, [questions, votedQuestions, passedQuestions])
 
   // Handle vote completion
   const handleVoteComplete = (questionId: string) => {
@@ -50,6 +63,12 @@ export default function Home() {
     recordVote(questionId)
     // Invalidate queries to ensure fresh data
     queryClient.invalidateQueries({ queryKey: queryKeys.questions })
+  }
+
+  // Handle pass
+  const handlePassQuestion = (questionId: string) => {
+    console.log('⏭️ Pass question:', questionId)
+    recordPass(questionId)
   }
 
   // Subscribe to new questions for Realtime updates
@@ -147,6 +166,8 @@ export default function Home() {
                   <VoteCardStack 
                     unvotedQuestions={unvotedQuestions}
                     onVoteComplete={handleVoteComplete}
+                    onPassQuestion={handlePassQuestion}
+                    onQuestionCreated={handleQuestionGenerated}
                   />
                 ) : (
                   <AllClear 
@@ -156,7 +177,15 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Section 2: Voted Questions History */}
+              {/* Section 2: Passed Questions (collapsible) */}
+              {passedQuestionList.length > 0 && (
+                <PassedQuestionsList 
+                  passedQuestions={passedQuestionList}
+                  onVoteComplete={handleVoteComplete}
+                />
+              )}
+
+              {/* Section 3: Voted Questions History */}
               {votedQuestionList.length > 0 && (
                 <VotedHistoryList votedQuestions={votedQuestionList} />
               )}
@@ -174,3 +203,4 @@ export default function Home() {
     </div>
   )
 }
+

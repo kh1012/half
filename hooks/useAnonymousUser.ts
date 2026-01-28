@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 
 const BROWSER_ID_KEY = 'half_browser_id'
 const VOTED_QUESTIONS_KEY = 'half_voted_questions'
+const PASSED_QUESTIONS_KEY = 'half_passed_questions'
 const LAST_NICKNAME_KEY = 'half_last_nickname'
 const LAST_GENERATION_KEY = 'half_last_generation'
 
@@ -15,6 +16,7 @@ export function useAnonymousUser() {
   const [browserId, setBrowserId] = useState<string | null>(null)
   const [nickname, setNickname] = useState<string>('익명')
   const [votedQuestions, setVotedQuestions] = useState<string[]>([])
+  const [passedQuestions, setPassedQuestions] = useState<string[]>([])
   const [isInitialized, setIsInitialized] = useState(false)
   const [lastGeneration, setLastGeneration] = useState<number | null>(null)
   const [hasSetNickname, setHasSetNickname] = useState(false) // New state to track initial nickname setup
@@ -37,6 +39,16 @@ export function useAnonymousUser() {
         setVotedQuestions(JSON.parse(storedVotedQuestions))
       } catch (e) {
         console.error('Failed to parse voted questions', e)
+      }
+    }
+
+    // Load passed questions
+    const storedPassedQuestions = localStorage.getItem(PASSED_QUESTIONS_KEY)
+    if (storedPassedQuestions) {
+      try {
+        setPassedQuestions(JSON.parse(storedPassedQuestions))
+      } catch (e) {
+        console.error('Failed to parse passed questions', e)
       }
     }
 
@@ -103,7 +115,34 @@ export function useAnonymousUser() {
       return updated
     })
     
+    // Remove from passed if it was passed before
+    removePass(questionId)
+    
     console.log('💾 Saved to localStorage')
+  }
+
+  const hasPassed = (questionId: string): boolean => {
+    return passedQuestions.includes(questionId)
+  }
+
+  const recordPass = (questionId: string) => {
+    console.log('⏭️ Recording pass for:', questionId)
+    
+    setPassedQuestions(prev => {
+      if (prev.includes(questionId)) return prev
+      const updated = [...prev, questionId]
+      localStorage.setItem(PASSED_QUESTIONS_KEY, JSON.stringify(updated))
+      return updated
+    })
+  }
+
+  const removePass = (questionId: string) => {
+    setPassedQuestions(prev => {
+      if (!prev.includes(questionId)) return prev
+      const updated = prev.filter(id => id !== questionId)
+      localStorage.setItem(PASSED_QUESTIONS_KEY, JSON.stringify(updated))
+      return updated
+    })
   }
 
   const updateNickname = async (newNickname: string) => {
@@ -161,10 +200,14 @@ export function useAnonymousUser() {
     browserId,
     nickname,
     votedQuestions,
+    passedQuestions,
     isInitialized,
     hasSetNickname,
     hasVoted,
+    hasPassed,
     recordVote,
+    recordPass,
+    removePass,
     updateNickname,
     canGenerateQuestion,
     recordQuestionGeneration,
