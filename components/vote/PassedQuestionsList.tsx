@@ -67,17 +67,13 @@ export function PassedQuestionsList({ passedQuestions, onVoteComplete }: PassedQ
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  style={{
-                    borderRadius: '12px',
-                    border: '2px solid #fbbf24', // Amber border to distinguish
-                    overflow: 'hidden'
-                  }}
                 >
                   <VotingCard 
                     question={question} 
                     onVoteComplete={() => onVoteComplete(question.id)}
                     forceUnvoted={true}
                     hideComments={true}
+                    passedCard={true}
                   />
                 </motion.div>
               ))}

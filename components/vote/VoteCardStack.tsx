@@ -29,88 +29,76 @@ export function VoteCardStack({ unvotedQuestions, onVoteComplete, onPassQuestion
 
   return (
     <div style={{ position: 'relative', width: '100%', marginBottom: '24px' }}>
-      {/* Stack depth indicator */}
-      {unvotedQuestions.length > 0 && (
+      {/* Header with count and create button */}
+      <div
+        className='mb-16'
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '16px'
+        }}
+      >
         <div
-          className='mb-16'
           style={{
-            textAlign: 'center',
             fontSize: '14px',
             color: '#6b7280',
             backgroundColor: 'white',
             padding: '8px 16px',
             borderRadius: '20px',
             border: '1px solid #e5e7eb',
-            display: 'inline-block',
-            marginLeft: '50%',
-            transform: 'translateX(-50%)'
           }}
         >
           남은 질문: {unvotedQuestions.length}개
         </div>
-      )}
+        <QuestionCreateForm onQuestionCreated={onQuestionCreated} />
+      </div>
 
-      {/* Main Layout: Card Stack + Create Form */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '24px', 
-        alignItems: 'flex-start',
-        flexWrap: 'wrap'
-      }}>
-        {/* Card Stack Container */}
-        <div style={{ position: 'relative', flex: '1 1 auto', minWidth: '280px' }}>
-          {/* Render cards in reverse order so the first card is on top */}
-          {[...visibleCards].reverse().map((question, reverseIndex) => {
-            const index = visibleCards.length - 1 - reverseIndex
-            const transform = getStackTransform(index)
-            const isTopCard = index === 0
+      {/* Card Stack Container */}
+      <div style={{ position: 'relative' }}>
+        {/* Render cards in reverse order so the first card is on top */}
+        {[...visibleCards].reverse().map((question, reverseIndex) => {
+          const index = visibleCards.length - 1 - reverseIndex
+          const transform = getStackTransform(index)
+          const isTopCard = index === 0
 
-            return (
-              <motion.div
-                key={question.id}
-                style={{
-                  position: index === 0 ? 'relative' : 'absolute',
-                  top: index === 0 ? 0 : -index * 50,
-                  left: 0,
-                  right: 0,
-                  zIndex: transform.zIndex,
-                  pointerEvents: isTopCard ? 'auto' : 'none',
-                  opacity: index === 0 ? 1 : 0.5,
-                }}
-                initial={false}
-                animate={{
-                  y: transform.y,
-                  scale: transform.scale,
-                  opacity: transform.opacity
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 400,
-                  damping: 30
-                }}
-              >
-                <VotingCard 
-                  question={question} 
-                  onVoteComplete={() => onVoteComplete(question.id)}
-                  onPassQuestion={onPassQuestion ? () => onPassQuestion(question.id) : undefined}
-                  forceUnvoted={true}
-                  hideComments={true}
-                />
-              </motion.div>
-            )
-          })}
-        </div>
-
-        {/* Question Create Form - Right Side */}
-        <div style={{ 
-          flex: '0 0 auto',
-          position: 'sticky',
-          top: '24px'
-        }}>
-          <QuestionCreateForm onQuestionCreated={onQuestionCreated} />
-        </div>
+          return (
+            <motion.div
+              key={question.id}
+              style={{
+                position: index === 0 ? 'relative' : 'absolute',
+                top: index === 0 ? 0 : -index * 50,
+                left: 0,
+                right: 0,
+                zIndex: transform.zIndex,
+                pointerEvents: isTopCard ? 'auto' : 'none',
+                opacity: index === 0 ? 1 : 0.5,
+              }}
+              initial={false}
+              animate={{
+                y: transform.y,
+                scale: transform.scale,
+                opacity: transform.opacity
+              }}
+              transition={{
+                type: 'spring',
+                stiffness: 400,
+                damping: 30
+              }}
+            >
+              <VotingCard 
+                question={question} 
+                onVoteComplete={() => onVoteComplete(question.id)}
+                onPassQuestion={onPassQuestion ? () => onPassQuestion(question.id) : undefined}
+                forceUnvoted={true}
+                hideComments={true}
+              />
+            </motion.div>
+          )
+        })}
       </div>
     </div>
   )
 }
+
 

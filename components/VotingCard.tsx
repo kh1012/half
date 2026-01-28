@@ -20,9 +20,10 @@ interface VotingCardProps {
   onPassQuestion?: () => void
   forceUnvoted?: boolean // Force show unvoted UI even if already voted
   hideComments?: boolean // Hide comment section (for unvoted card stack)
+  passedCard?: boolean // Whether this is a passed card
 }
 
-export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvoted = false, hideComments = false }: VotingCardProps) {
+export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvoted = false, hideComments = false, passedCard = false }: VotingCardProps) {
   const { browserId, hasVoted, recordVote, isInitialized } = useAnonymousUser()
   const { data: stats } = useQuestionStats(question.id)
   const realtimeVotes = useRealtimeVotes(question.id, stats?.count_a || 0, stats?.count_b || 0)
@@ -153,7 +154,7 @@ export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvo
   if (!displayAsVoted) {
     return (
       <div style={{ marginBottom: '24px' }}>
-        <div className="bg-gray-50 border border-gray-300 shadow-lg rounded-md" style={{ padding: '32px 20px', position: 'relative' }}>
+        <div className={`bg-gray-50 border ${passedCard ? 'border-[#fbbf24]' : 'border-gray-300'} shadow-lg rounded-md`} style={{ padding: '32px 20px', position: 'relative' }}>
           {/* Admin Delete Button */}
           {isAdmin && (
             <button
@@ -206,17 +207,16 @@ export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvo
           {onPassQuestion && (
             <button
               onClick={onPassQuestion}
-              className="hover:bg-gray-100 transition-colors"
+              className="bg-[#fff] transition-colors border border-gray-400"
               style={{
                 marginTop: '16px',
                 padding: '8px 16px',
                 fontSize: '13px',
-                color: '#9ca3af',
-                background: 'transparent',
-                border: 'none',
+                color: '#000',
                 cursor: 'pointer',
                 width: '100%',
-                textAlign: 'center'
+                textAlign: 'center',
+                borderRadius: '4px',
               }}
             >
               이 질문 건너뛰기 (Pass)
