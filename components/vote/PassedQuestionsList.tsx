@@ -19,26 +19,11 @@ export function PassedQuestionsList({ passedQuestions, onVoteComplete }: PassedQ
   }
 
   return (
-    <div style={{ marginTop: '32px', width: '100%' }}>
+    <div className="mt-8 w-full">
       {/* Toggle Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px',
-          width: '100%',
-          padding: '12px 16px',
-          fontSize: '14px',
-          color: '#9ca3af',
-          background: 'transparent',
-          border: '1px dashed #d1d5db',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          transition: 'all 0.2s'
-        }}
-        className="hover:border-gray-400 hover:text-gray-600"
+        className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm text-gray-400 bg-transparent border border-dashed border-gray-300 rounded-lg cursor-pointer transition-all hover:border-gray-400 hover:text-gray-600"
       >
         <SkipForward size={16} />
         건너뛴 질문 ({passedQuestions.length}개)
@@ -53,14 +38,9 @@ export function PassedQuestionsList({ passedQuestions, onVoteComplete }: PassedQ
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            style={{ overflow: 'hidden' }}
+            className="overflow-hidden"
           >
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: '16px',
-              marginTop: '16px'
-            }}>
+            <div className="flex flex-col gap-4 mt-4">
               {passedQuestions.map((question) => (
                 <motion.div
                   key={question.id}

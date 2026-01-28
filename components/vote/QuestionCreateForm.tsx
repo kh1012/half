@@ -79,19 +79,7 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
         onClick={() => setIsOpen(true)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '48px',
-          height: '48px',
-          backgroundColor: '#000000',
-          color: '#ffffff',
-          border: 'none',
-          borderRadius: '50%',
-          cursor: 'pointer',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
-        }}
+        className="flex items-center justify-center w-12 h-12 bg-black text-white rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
         title="새 질문 만들기"
       >
         <Plus size={24} />
@@ -105,17 +93,7 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              backdropFilter: 'blur(4px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 100,
-              padding: '16px'
-            }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-[4px] flex items-center justify-center z-[100] p-4"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -123,47 +101,17 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              style={{
-                backgroundColor: '#ffffff',
-                borderRadius: '16px',
-                padding: '24px',
-                width: '100%',
-                maxWidth: '400px',
-                boxShadow: '0 20px 60px rgba(0,0,0,0.2)'
-              }}
+              className="bg-white rounded-2xl p-6 w-full max-w-[400px] shadow-[0_20px_60px_rgba(0,0,0,0.2)]"
             >
               {/* Header */}
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center',
-                marginBottom: '20px'
-              }}>
-                <h2 style={{ 
-                  fontSize: '18px', 
-                  fontWeight: 600, 
-                  color: '#111827',
-                  margin: 0
-                }}>
+              <div className="flex justify-between items-center mb-5">
+                <h2 className="text-lg font-semibold text-gray-900 m-0">
                   새 질문 만들기
                 </h2>
                 <button
                   onClick={handleClose}
                   disabled={isSubmitting}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '32px',
-                    height: '32px',
-                    background: 'none',
-                    border: 'none',
-                    borderRadius: '8px',
-                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                    color: '#6b7280',
-                    transition: 'background-color 0.2s'
-                  }}
-                  className="hover:bg-gray-100"
+                  className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   <X size={20} />
                 </button>
@@ -171,14 +119,8 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
 
               {/* Form */}
               <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ 
-                    display: 'block', 
-                    fontSize: '13px', 
-                    fontWeight: 500, 
-                    color: '#374151',
-                    marginBottom: '6px'
-                  }}>
+                <div className="mb-4">
+                  <label className="block text-[13px] font-medium text-gray-700 mb-1.5">
                     질문
                   </label>
                   <textarea
@@ -187,55 +129,25 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
                     placeholder="사람들에게 물어볼 질문을 입력하세요"
                     maxLength={200}
                     autoFocus
-                    style={{
-                      width: '100%',
-                      padding: '12px',
-                      border: '1px solid #e5e7eb',
-                      borderRadius: '8px',
-                      fontSize: '14px',
-                      resize: 'none',
-                      minHeight: '100px',
-                      fontFamily: 'inherit',
-                      transition: 'border-color 0.2s'
-                    }}
-                    className="focus:border-gray-400 focus:outline-none"
+                    className="w-full p-3 border border-gray-200 rounded-lg text-sm resize-none min-h-[100px] font-inherit transition-colors focus:border-gray-400 focus:outline-none"
                   />
-                  <div style={{ 
-                    fontSize: '11px', 
-                    color: '#9ca3af', 
-                    textAlign: 'right',
-                    marginTop: '4px'
-                  }}>
+                  <div className="text-[11px] text-gray-400 text-right mt-1">
                     {title.length}/200
                   </div>
                 </div>
 
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ 
-                    display: 'block', 
-                    fontSize: '13px', 
-                    fontWeight: 500, 
-                    color: '#374151',
-                    marginBottom: '6px'
-                  }}>
+                <div className="mb-4">
+                  <label className="block text-[13px] font-medium text-gray-700 mb-1.5">
                     선택지
                   </label>
-                  <div style={{ display: 'flex', gap: '12px' }}>
+                  <div className="flex gap-2 flex-col">
                     <input
                       type="text"
                       value={optionA}
                       onChange={(e) => setOptionA(e.target.value)}
                       placeholder="선택 1"
                       maxLength={50}
-                      style={{
-                        flex: 1,
-                        padding: '12px',
-                        border: '1px solid #e5e7eb',
-                        borderRadius: '8px',
-                        fontSize: '14px',
-                        transition: 'border-color 0.2s'
-                      }}
-                      className="focus:border-gray-400 focus:outline-none"
+                      className="flex-1 p-3 border border-gray-200 rounded-lg text-sm transition-colors focus:border-gray-400 focus:outline-none"
                     />
                     <input
                       type="text"
@@ -243,32 +155,14 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
                       onChange={(e) => setOptionB(e.target.value)}
                       placeholder="선택 2"
                       maxLength={50}
-                      style={{
-                        flex: 1,
-                        padding: '12px',
-                        border: '1px solid #e5e7eb',
-                        borderRadius: '8px',
-                        fontSize: '14px',
-                        transition: 'border-color 0.2s'
-                      }}
-                      className="focus:border-gray-400 focus:outline-none"
+                      className="flex-1 p-3 border border-gray-200 rounded-lg text-sm transition-colors focus:border-gray-400 focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {error && (
-                  <div style={{ 
-                    backgroundColor: '#fef2f2',
-                    border: '1px solid #fecaca',
-                    borderRadius: '8px',
-                    padding: '12px',
-                    marginBottom: '16px'
-                  }}>
-                    <p style={{ 
-                      color: '#dc2626', 
-                      fontSize: '13px', 
-                      margin: 0
-                    }}>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                    <p className="text-red-600 text-[13px] m-0">
                       {error}
                     </p>
                   </div>
@@ -277,28 +171,12 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
                 <button
                   type="submit"
                   disabled={!isValid || isSubmitting}
-                  style={{
-                    width: '100%',
-                    padding: '14px',
-                    backgroundColor: isValid ? '#000000' : '#e5e7eb',
-                    color: isValid ? '#ffffff' : '#9ca3af',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '15px',
-                    fontWeight: 500,
-                    cursor: isValid && !isSubmitting ? 'pointer' : 'not-allowed',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    transition: 'all 0.2s'
-                  }}
+                  className={`w-full p-3.5 rounded-lg text-[15px] font-medium flex items-center justify-center gap-2 transition-all ${isValid && !isSubmitting ? 'bg-black text-white hover:bg-gray-800' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
                 >
                   {isSubmitting ? (
                     '생성 중...'
                   ) : (
                     <>
-                      <Send size={16} />
                       질문 생성하기
                     </>
                   )}
@@ -310,5 +188,6 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
       </AnimatePresence>
     </>
   )
+
 }
 

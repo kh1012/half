@@ -49,10 +49,10 @@ export function HexCell({ value, intensity, size = 16, onAnimationComplete }: He
 
   return (
     <motion.div
+      className="relative"
       style={{
         width: `${size}px`,
         height: `${size}px`,
-        position: 'relative',
       }}
       animate={controls}
       layout
@@ -64,7 +64,7 @@ export function HexCell({ value, intensity, size = 16, onAnimationComplete }: He
         width={size}
         height={size}
         viewBox="0 0 100 100"
-        style={{ display: 'block' }}
+        className="block"
       >
         <polygon
           points="50 0, 93.3 25, 93.3 75, 50 100, 6.7 75, 6.7 25"

@@ -28,34 +28,17 @@ export function VoteCardStack({ unvotedQuestions, onVoteComplete, onPassQuestion
   }
 
   return (
-    <div style={{ position: 'relative', width: '100%', marginBottom: '24px' }}>
+    <div className="relative w-full mb-6">
       {/* Header with count and create button */}
-      <div
-        className='mb-16'
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '16px'
-        }}
-      >
-        <div
-          style={{
-            fontSize: '14px',
-            color: '#6b7280',
-            backgroundColor: 'white',
-            padding: '8px 16px',
-            borderRadius: '20px',
-            border: '1px solid #e5e7eb',
-          }}
-        >
+      <div className="mb-16 flex items-center justify-center gap-4">
+        <div className="text-sm text-gray-500 bg-white py-2 px-4 rounded-[20px] border border-gray-200">
           남은 질문: {unvotedQuestions.length}개
         </div>
         <QuestionCreateForm onQuestionCreated={onQuestionCreated} />
       </div>
 
       {/* Card Stack Container */}
-      <div style={{ position: 'relative' }}>
+      <div className="relative">
         {/* Render cards in reverse order so the first card is on top */}
         {[...visibleCards].reverse().map((question, reverseIndex) => {
           const index = visibleCards.length - 1 - reverseIndex
@@ -65,13 +48,10 @@ export function VoteCardStack({ unvotedQuestions, onVoteComplete, onPassQuestion
           return (
             <motion.div
               key={question.id}
+              className={`left-0 right-0 ${isTopCard ? 'relative pointer-events-auto' : 'absolute pointer-events-none'}`}
               style={{
-                position: index === 0 ? 'relative' : 'absolute',
                 top: index === 0 ? 0 : -index * 50,
-                left: 0,
-                right: 0,
                 zIndex: transform.zIndex,
-                pointerEvents: isTopCard ? 'auto' : 'none',
                 opacity: index === 0 ? 1 : 0.5,
               }}
               initial={false}

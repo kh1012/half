@@ -14,18 +14,7 @@ export function AllClear({ onGenerateNew, isGenerating = false }: AllClearProps)
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 'clamp(48px, 8vw, 80px)',
-        backgroundColor: '#ffffff',
-        border: '1px solid #e5e7eb',
-        borderRadius: '12px',
-        textAlign: 'center',
-        minHeight: '400px'
-      }}
+      className="flex flex-col items-center justify-center p-[clamp(48px,8vw,80px)] bg-white border border-gray-200 rounded-xl text-center min-h-[400px]"
     >
       {/* Success Icon */}
       <motion.div
@@ -42,33 +31,17 @@ export function AllClear({ onGenerateNew, isGenerating = false }: AllClearProps)
           size={64}
           color="#10b981"
           strokeWidth={1.5}
-          style={{ marginBottom: '24px' }}
+          className="mb-6"
         />
       </motion.div>
 
       {/* Title */}
-      <h2
-        style={{
-          fontSize: 'clamp(1.5rem, 4vw, 2rem)',
-          fontWeight: 600,
-          color: '#111827',
-          marginBottom: '16px',
-          lineHeight: 1.3
-        }}
-      >
+      <h2 className="text-[clamp(1.5rem,4vw,2rem)] font-semibold text-gray-900 mb-4 leading-tight">
         모든 질문에 투표했습니다!
       </h2>
 
       {/* Description */}
-      <p
-        style={{
-          fontSize: 'clamp(0.875rem, 2.5vw, 1.125rem)',
-          color: '#6b7280',
-          lineHeight: 1.6,
-          maxWidth: '500px',
-          marginBottom: '32px'
-        }}
-      >
+      <p className="text-[clamp(0.875rem,2.5vw,1.125rem)] text-gray-500 leading-relaxed max-w-[500px] mb-8">
         새로운 질문을 생성하거나 다른 사용자가 질문을 생성할 때까지 기다려보세요
       </p>
 
@@ -80,20 +53,7 @@ export function AllClear({ onGenerateNew, isGenerating = false }: AllClearProps)
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           title="AI가 새 질문을 생성합니다"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '56px',
-            height: '56px',
-            color: '#ffffff',
-            backgroundColor: '#000000',
-            border: '2px solid #000000',
-            borderRadius: '50%',
-            cursor: isGenerating ? 'not-allowed' : 'pointer',
-            transition: 'all 0.2s',
-            opacity: isGenerating ? 0.6 : 1
-          }}
+          className={`flex items-center justify-center w-14 h-14 text-white bg-black border-2 border-black rounded-full transition-all duration-200 ${isGenerating ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
         >
           {isGenerating ? (
             <motion.div
@@ -113,14 +73,7 @@ export function AllClear({ onGenerateNew, isGenerating = false }: AllClearProps)
       )}
 
       {/* Helper Text */}
-      <p
-        style={{
-          fontSize: '12px',
-          color: '#9ca3af',
-          marginTop: '24px',
-          maxWidth: '400px'
-        }}
-      >
+      <p className="text-xs text-gray-400 mt-6 max-w-[400px]">
         질문은 AI가 자동으로 생성하며, 투표한 질문 목록은 하단에서 확인할 수 있습니다
       </p>
     </motion.div>

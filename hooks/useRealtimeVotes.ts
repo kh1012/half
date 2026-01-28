@@ -34,7 +34,6 @@ export function useRealtimeVotes(questionId: string, initialCountA: number = 0, 
           filter: `question_id=eq.${questionId}`,
         },
         (payload) => {
-          console.log('🗳️ Realtime vote event received:', payload)
           const newVote = payload.new as VoteEvent
           const isOptionA = newVote.chosen_option === 'a'
 
@@ -44,7 +43,6 @@ export function useRealtimeVotes(questionId: string, initialCountA: number = 0, 
 
           // 2. Optimistically update Tanstack Query cache immediately for instant feedback
           queryClient.setQueryData(queryKeys.stats(questionId), (old: any) => {
-            console.log('🔄 Updating stats cache:', old)
             
             // If no data exists yet, construct initial structure using props
             if (!old) {
@@ -67,7 +65,7 @@ export function useRealtimeVotes(questionId: string, initialCountA: number = 0, 
         }
       )
       .subscribe((status) => {
-        console.log(`🔌 Vote subscription status for ${questionId}:`, status)
+        // Status logging removed
       })
 
     return () => {

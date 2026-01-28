@@ -53,16 +53,10 @@ export function HexagonGrid({ countA, countB, optionA, optionB }: HexagonGridPro
   const rows = Math.ceil(shuffled.length / cols) + 1
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px', width: '100%' }}>
+    <div className="flex flex-col items-center gap-6 w-full">
       {/* Hexagon Grid */}
       <div 
-        style={{ 
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: `${hexSize * 0.25}px`,
-          padding: '20px',
-        }}
+        className="flex flex-col items-center gap-1 p-5"
       >
         {Array.from({ length: rows }).map((_, rowIndex) => {
           const isOffsetRow = rowIndex % 2 === 1
@@ -76,26 +70,18 @@ export function HexagonGrid({ countA, countB, optionA, optionB }: HexagonGridPro
           return (
             <div
               key={rowIndex}
-              style={{
-                display: 'flex',
-                gap: `${hexSize * 0.25}px`,
-                marginLeft: isOffsetRow ? `${hexSize * 0.75}px` : '0',
-              }}
+              className={`flex gap-1 ${isOffsetRow ? 'ml-3' : ''}`}
             >
               {hexagonsInRow.map((type, hexIndex) => (
                 <div
                   key={`${rowIndex}-${hexIndex}`}
-                  style={{
-                    width: `${hexSize}px`,
-                    height: `${hexSize}px`,
-                    position: 'relative',
-                  }}
+                  className="w-4 h-4 relative"
                 >
                   <svg
                     width={hexSize}
                     height={hexSize}
                     viewBox="0 0 100 100"
-                    style={{ display: 'block' }}
+                    className="block"
                   >
                     <polygon
                       points="50 0, 93.3 25, 93.3 75, 50 100, 6.7 75, 6.7 25"
@@ -118,9 +104,9 @@ export function HexagonGrid({ countA, countB, optionA, optionB }: HexagonGridPro
       </div>
 
       {/* Legend */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', maxWidth: '500px', padding: '0 12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '24px', height: '24px', position: 'relative' }}>
+      <div className="flex flex-col gap-4 w-full max-w-[500px] px-3">
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 relative">
             <svg width="24" height="24" viewBox="0 0 100 100">
               <polygon
                 points="50 0, 93.3 25, 93.3 75, 50 100, 6.7 75, 6.7 25"
@@ -130,17 +116,17 @@ export function HexagonGrid({ countA, countB, optionA, optionB }: HexagonGridPro
               />
             </svg>
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 500, fontSize: 'clamp(0.875rem, 2.5vw, 1.125rem)', color: 'black', marginBottom: '4px', wordBreak: 'keep-all' }}>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-[clamp(0.875rem,2.5vw,1.125rem)] text-black mb-1 break-keep">
               {optionA}
             </div>
-            <div style={{ fontSize: 'clamp(12px, 2vw, 14px)', color: '#6b7280' }}>
+            <div className="text-[clamp(12px,2vw,14px)] text-gray-500">
               {countA}표 ({percentA}%)
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '24px', height: '24px', position: 'relative' }}>
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 relative">
             <svg width="24" height="24" viewBox="0 0 100 100">
               <polygon
                 points="50 0, 93.3 25, 93.3 75, 50 100, 6.7 75, 6.7 25"
@@ -150,11 +136,11 @@ export function HexagonGrid({ countA, countB, optionA, optionB }: HexagonGridPro
               />
             </svg>
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 500, fontSize: 'clamp(0.875rem, 2.5vw, 1.125rem)', color: 'black', marginBottom: '4px', wordBreak: 'keep-all' }}>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-[clamp(0.875rem,2.5vw,1.125rem)] text-black mb-1 break-keep">
               {optionB}
             </div>
-            <div style={{ fontSize: 'clamp(12px, 2vw, 14px)', color: '#6b7280' }}>
+            <div className="text-[clamp(12px,2vw,14px)] text-gray-500">
               {countB}표 ({percentB}%)
             </div>
           </div>

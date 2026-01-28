@@ -83,11 +83,8 @@ export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvo
 
   const handleVote = async (option: 'a' | 'b') => {
     if (!browserId || !isInitialized || voted || voteMutation.isPending) {
-      console.log('❌ Vote blocked:', { browserId, isInitialized, voted, isPending: voteMutation.isPending })
       return
     }
-
-    console.log('🎯 Starting vote for:', question.id, 'option:', option)
 
     try {
       await voteMutation.mutateAsync({
@@ -95,16 +92,12 @@ export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvo
         browserId,
         chosenOption: option,
       })
-      console.log('✅ Vote mutation successful')
       
       recordVote(question.id)
-      console.log('📝 Vote recorded in localStorage')
       
       setVoted(true)
-      console.log('🔄 Local voted state updated')
       
       onVoteComplete?.()
-      console.log('🚀 onVoteComplete callback triggered')
     } catch (e) {
       console.error('❌ Failed to vote:', e)
     }
@@ -153,51 +146,48 @@ export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvo
 
   if (!displayAsVoted) {
     return (
-      <div style={{ marginBottom: '24px' }}>
-        <div className={`bg-gray-50 border ${passedCard ? 'border-[#fbbf24]' : 'border-gray-300'} shadow-lg rounded-md`} style={{ padding: '32px 20px', position: 'relative' }}>
+      <div className="mb-6">
+        <div className={`bg-gray-50 border ${passedCard ? 'border-[#fbbf24]' : 'border-gray-300'} shadow-lg rounded-md relative p-8 px-5`}>
           {/* Admin Delete Button */}
           {isAdmin && (
             <button
               onClick={handleDelete}
               disabled={isDeleting}
-              className="hover:bg-red-100 transition-colors rounded-md disabled:opacity-50"
-              style={{ position: 'absolute', top: '16px', right: '16px', padding: '8px', color: '#dc2626' }}
+              className="hover:bg-red-100 transition-colors rounded-md disabled:opacity-50 absolute top-4 right-4 p-2 text-red-600"
               title="질문 삭제"
             >
               <X size={20} />
             </button>
           )}
           {/* Metadata */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', fontSize: '12px', color: '#6b7280', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div className="flex flex-wrap gap-3 text-xs text-gray-500 mb-5">
+            <div className="flex items-center gap-1.5">
               <Clock size={14} />
-              <span style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>{formatTimestamp(question.created_at)}</span>
+              <span className="text-[clamp(10px,2vw,12px)]">{formatTimestamp(question.created_at)}</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div className="flex items-center gap-1.5">
               <Users size={14} />
-              <span style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>{stats?.total_votes || 0}명 참여 · {elapsedTime}</span>
+              <span className="text-[clamp(10px,2vw,12px)]">{stats?.total_votes || 0}명 참여 · {elapsedTime}</span>
             </div>
-            {question.category && <span style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>#{question.category}</span>}
+            {question.category && <span className="text-[clamp(10px,2vw,12px)]">#{question.category}</span>}
           </div>
 
-          <h3 style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)', fontWeight: 'bold', marginBottom: '28px', color: 'black', lineHeight: '1.6' }}>
+          <h3 className="text-[clamp(1.1rem,4vw,1.5rem)] font-bold mb-7 text-black leading-relaxed">
             {question.title}
           </h3>
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3">
             <button
               onClick={() => handleVote('a')}
               disabled={voteMutation.isPending || !isInitialized}
-              className="border border-gray-400 bg-white text-black rounded-md hover:bg-black hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-              style={{ padding: 'clamp(16px, 4vw, 24px) clamp(12px, 3vw, 20px)', fontSize: 'clamp(0.875rem, 2.5vw, 1.125rem)' }}
+              className="border border-gray-400 bg-white text-black rounded-md hover:bg-black hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium p-[clamp(16px,4vw,24px)_clamp(12px,3vw,20px)] text-[clamp(0.875rem,2.5vw,1.125rem)]"
             >
               {question.option_a}
             </button>
             <button
               onClick={() => handleVote('b')}
               disabled={voteMutation.isPending || !isInitialized}
-              className="border border-gray-400 bg-white text-black rounded-md hover:bg-black hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-              style={{ padding: 'clamp(16px, 4vw, 24px) clamp(12px, 3vw, 20px)', fontSize: 'clamp(0.875rem, 2.5vw, 1.125rem)' }}
+              className="border border-gray-400 bg-white text-black rounded-md hover:bg-black hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium p-[clamp(16px,4vw,24px)_clamp(12px,3vw,20px)] text-[clamp(0.875rem,2.5vw,1.125rem)]"
             >
               {question.option_b}
             </button>
@@ -207,17 +197,7 @@ export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvo
           {onPassQuestion && (
             <button
               onClick={onPassQuestion}
-              className="bg-[#fff] transition-colors border border-gray-400"
-              style={{
-                marginTop: '16px',
-                padding: '8px 16px',
-                fontSize: '13px',
-                color: '#000',
-                cursor: 'pointer',
-                width: '100%',
-                textAlign: 'center',
-                borderRadius: '4px',
-              }}
+              className="bg-white transition-colors border border-gray-400 mt-4 py-2 px-4 text-[13px] text-black cursor-pointer w-full text-center rounded"
             >
               이 질문 건너뛰기 (Pass)
             </button>
@@ -231,50 +211,47 @@ export function VotingCard({ question, onVoteComplete, onPassQuestion, forceUnvo
   }
 
   return (
-    <div style={{ marginBottom: '24px' }}>
-      <div className="bg-gradient-to-b from-gray-100 to-white rounded-md" style={{ padding: '32px 20px', position: 'relative' }}>
+    <div className="mb-6">
+      <div className="bg-gradient-to-b from-gray-100 to-white rounded-md p-8 px-5 relative">
         {/* Admin Delete Button */}
         {isAdmin && (
           <button
             onClick={handleDelete}
             disabled={isDeleting}
-            className="hover:bg-red-100 transition-colors rounded-md disabled:opacity-50"
-            style={{ position: 'absolute', top: '16px', right: '16px', padding: '8px', color: '#dc2626' }}
+            className="hover:bg-red-100 transition-colors rounded-md disabled:opacity-50 absolute top-4 right-4 p-2 text-red-600"
             title="질문 삭제"
           >
             <X size={20} />
           </button>
         )}
         {/* Metadata */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', fontSize: '12px', color: '#6b7280', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div className="flex flex-wrap gap-3 text-xs text-gray-500 mb-5">
+          <div className="flex items-center gap-1.5">
             <Clock size={14} />
-            <span style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>{formatTimestamp(question.created_at)}</span>
+            <span className="text-[clamp(10px,2vw,12px)]">{formatTimestamp(question.created_at)}</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div className="flex items-center gap-1.5">
             <Users size={14} />
-            <span style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>{stats?.total_votes || 0}명 참여 · {elapsedTime}</span>
+            <span className="text-[clamp(10px,2vw,12px)]">{stats?.total_votes || 0}명 참여 · {elapsedTime}</span>
           </div>
-          {question.category && <span style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>#{question.category}</span>}
+          {question.category && <span className="text-[clamp(10px,2vw,12px)]">#{question.category}</span>}
         </div>
 
-        <h3 style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)', fontWeight: 'bold', marginBottom: '28px', color: 'black', lineHeight: '1.6' }}>
+        <h3 className="text-[clamp(1.1rem,4vw,1.5rem)] font-bold mb-7 text-black leading-relaxed">
           {question.title}
         </h3>
         
-        
-        {/* Responsive layout: stacked on mobile, horizontal on desktop */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center' }}>
-          {/* Hexagon Heatmap */}
-          <HexHeatmap 
-            countA={realtimeVotes.countA}
-            countB={realtimeVotes.countB}
-            optionA={question.option_a}
-            optionB={question.option_b}
-          />
-        </div>
+        <HexHeatmap 
+          countA={realtimeVotes.countA} 
+          countB={realtimeVotes.countB} 
+          optionA={question.option_a}
+          optionB={question.option_b}
+        />
       </div>
-      <CommentSection questionId={question.id} voted={voted} isAdmin={isAdmin} />
+
+      {!hideComments && (
+        <CommentSection questionId={question.id} voted={voted} isAdmin={isAdmin} />
+      )}
     </div>
   )
 }

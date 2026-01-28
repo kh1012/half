@@ -73,19 +73,10 @@ export function HexHeatmap({ countA, countB, optionA, optionB }: HexHeatmapProps
   const percentB = countA + countB > 0 ? Math.round((countB / (countA + countB)) * 100) : 50
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px', width: '100%' }}>
+    <div className="flex flex-col items-center gap-8 w-full">
       {/* Hexagon Grid */}
       <motion.div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: `${hexSize * 0.25}px`,
-          padding: '24px',
-          backgroundColor: '#ffffff',
-          borderRadius: '8px',
-          border: '1px solid #e5e7eb',
-        }}
+        className="flex flex-col items-center gap-1 p-6 bg-white rounded-lg border border-gray-200"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -102,11 +93,7 @@ export function HexHeatmap({ countA, countB, optionA, optionB }: HexHeatmapProps
           return (
             <motion.div
               key={rowIndex}
-              style={{
-                display: 'flex',
-                gap: `${hexSize * 0.25}px`,
-                marginLeft: isOffsetRow ? `${hexSize * 0.75}px` : '0',
-              }}
+              className={`flex gap-1 ${isOffsetRow ? 'ml-3' : ''}`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{
@@ -140,9 +127,9 @@ export function HexHeatmap({ countA, countB, optionA, optionB }: HexHeatmapProps
       </motion.div>
 
       {/* Legend */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', maxWidth: '500px', padding: '0 12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '24px', height: '24px', position: 'relative' }}>
+      <div className="flex flex-col gap-4 w-full max-w-[500px] px-3">
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 relative">
             <svg width="24" height="24" viewBox="0 0 100 100">
               <polygon
                 points="50 0, 93.3 25, 93.3 75, 50 100, 6.7 75, 6.7 25"
@@ -152,17 +139,17 @@ export function HexHeatmap({ countA, countB, optionA, optionB }: HexHeatmapProps
               />
             </svg>
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 500, fontSize: 'clamp(0.875rem, 2.5vw, 1.125rem)', color: 'black', marginBottom: '4px', wordBreak: 'keep-all' }}>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-[clamp(0.875rem,2.5vw,1.125rem)] text-black mb-1 break-keep">
               {optionA}
             </div>
-            <div style={{ fontSize: 'clamp(12px, 2vw, 14px)', color: '#6b7280' }}>
+            <div className="text-[clamp(12px,2vw,14px)] text-gray-500">
               {countA}표 ({percentA}%)
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '24px', height: '24px', position: 'relative' }}>
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 relative">
             <svg width="24" height="24" viewBox="0 0 100 100">
               <polygon
                 points="50 0, 93.3 25, 93.3 75, 50 100, 6.7 75, 6.7 25"
@@ -172,11 +159,11 @@ export function HexHeatmap({ countA, countB, optionA, optionB }: HexHeatmapProps
               />
             </svg>
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 500, fontSize: 'clamp(0.875rem, 2.5vw, 1.125rem)', color: 'black', marginBottom: '4px', wordBreak: 'keep-all' }}>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-[clamp(0.875rem,2.5vw,1.125rem)] text-black mb-1 break-keep">
               {optionB}
             </div>
-            <div style={{ fontSize: 'clamp(12px, 2vw, 14px)', color: '#6b7280' }}>
+            <div className="text-[clamp(12px,2vw,14px)] text-gray-500">
               {countB}표 ({percentB}%)
             </div>
           </div>

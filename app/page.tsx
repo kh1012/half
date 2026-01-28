@@ -58,7 +58,6 @@ export default function Home() {
 
   // Handle vote completion
   const handleVoteComplete = (questionId: string) => {
-    console.log('✅ Vote completed for:', questionId)
     // Update local state to trigger re-render
     recordVote(questionId)
     // Invalidate queries to ensure fresh data
@@ -67,7 +66,6 @@ export default function Home() {
 
   // Handle pass
   const handlePassQuestion = (questionId: string) => {
-    console.log('⏭️ Pass question:', questionId)
     recordPass(questionId)
   }
 
@@ -121,7 +119,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-white" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="min-h-screen bg-white flex flex-col items-center">
       {/* Nickname Setup Modal */}
       <NicknameModal 
         isOpen={isInitialized && !hasSetNickname} 
@@ -129,13 +127,13 @@ export default function Home() {
       />
 
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white" style={{ width: '100%' }}>
-        <div style={{ maxWidth: '672px', margin: '0 auto', width: '100%', padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 24px)' }}>
+      <header className="border-b border-gray-200 bg-white w-full">
+        <div className="max-w-2xl mx-auto w-full p-[clamp(20px,4vw,32px)_clamp(16px,4vw,24px)]">
           <div>
-            <h1 style={{ fontSize: 'clamp(1.75rem, 6vw, 2.25rem)', fontWeight: 'bold', color: 'black', marginBottom: '8px' }}>
+            <h1 className="font-bold text-black mb-2 text-[clamp(1.75rem,6vw,2.25rem)]">
               HALF
             </h1>
-            <p style={{ fontSize: 'clamp(0.875rem, 2.5vw, 1rem)', color: '#6b7280' }}>
+            <p className="text-gray-500 text-[clamp(0.875rem,2.5vw,1rem)]">
               50:50 균형의 논쟁 엔진
             </p>
           </div>
@@ -143,25 +141,25 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1" style={{ width: '100%', maxWidth: '672px' }}>
-        <div style={{ padding: 'clamp(32px, 6vw, 48px) clamp(16px, 4vw, 24px)' }}>
+      <main className="flex-1 w-full max-w-2xl">
+        <div className="p-[clamp(32px,6vw,48px)_clamp(16px,4vw,24px)]">
           {isLoading ? (
-            <div style={{ textAlign: 'center', padding: 'clamp(60px, 10vw, 96px) 0' }}>
-              <div style={{ color: '#6b7280' }}>로딩 중...</div>
+            <div className="text-center py-[clamp(60px,10vw,96px)]">
+              <div className="text-gray-500">로딩 중...</div>
             </div>
           ) : questions.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'clamp(60px, 10vw, 96px) 0' }}>
-              <p style={{ color: '#374151', marginBottom: '12px', fontSize: 'clamp(1rem, 2.5vw, 1.125rem)' }}>
+            <div className="text-center py-[clamp(60px,10vw,96px)]">
+              <p className="text-gray-700 mb-3 text-[clamp(1rem,2.5vw,1.125rem)]">
                 아직 질문이 없습니다
               </p>
-              <p style={{ fontSize: 'clamp(0.875rem, 2vw, 0.875rem)', color: '#6b7280' }}>
+              <p className="text-[clamp(0.875rem,2vw,0.875rem)] text-gray-500">
                 새 질문 생성 버튼을 눌러 시작해보세요!
               </p>
             </div>
           ) : (
             <>
               {/* Section 1: Unvoted Cards Stack */}
-              <div style={{ marginBottom: 'clamp(48px, 8vw, 72px)' }}>
+              <div className="mb-[clamp(48px,8vw,72px)]">
                 {unvotedQuestions.length > 0 ? (
                   <VoteCardStack 
                     unvotedQuestions={unvotedQuestions}
@@ -195,8 +193,8 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white" style={{ width: '100%', marginTop: 'clamp(60px, 10vw, 96px)' }}>
-        <div style={{ maxWidth: '672px', margin: '0 auto', width: '100%', padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 24px)', textAlign: 'center', fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', color: '#6b7280' }}>
+      <footer className="border-t border-gray-200 bg-white w-full mt-[clamp(60px,10vw,96px)]">
+        <div className="max-w-2xl mx-auto w-full p-[clamp(20px,4vw,32px)_clamp(16px,4vw,24px)] text-center text-gray-500 text-[clamp(0.75rem,2vw,0.875rem)]">
           © 2026 HALF · 사소하지만 팽팽한 논쟁
         </div>
       </footer>

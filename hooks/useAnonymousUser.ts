@@ -105,11 +105,8 @@ export function useAnonymousUser() {
   }
 
   const recordVote = (questionId: string) => {
-    console.log('📝 Recording vote for:', questionId)
-    
     setVotedQuestions(prev => {
       const updated = [...prev, questionId]
-      console.log('📝 Updated votedQuestions state:', updated)
       // Save to localStorage inside setVotedQuestions to ensure consistency
       localStorage.setItem(VOTED_QUESTIONS_KEY, JSON.stringify(updated))
       return updated
@@ -117,8 +114,6 @@ export function useAnonymousUser() {
     
     // Remove from passed if it was passed before
     removePass(questionId)
-    
-    console.log('💾 Saved to localStorage')
   }
 
   const hasPassed = (questionId: string): boolean => {
@@ -126,8 +121,6 @@ export function useAnonymousUser() {
   }
 
   const recordPass = (questionId: string) => {
-    console.log('⏭️ Recording pass for:', questionId)
-    
     setPassedQuestions(prev => {
       if (prev.includes(questionId)) return prev
       const updated = [...prev, questionId]

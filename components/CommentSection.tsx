@@ -95,8 +95,8 @@ export function CommentSection({ questionId, voted, isAdmin = false }: CommentSe
 
   if (!voted) {
     return (
-      <div className="bg-gray-50 border border-gray-200 rounded-md" style={{ padding: '24px 20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#6b7280', fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
+      <div className="bg-gray-50 border border-gray-200 rounded-md p-6 px-5">
+        <div className="flex items-center gap-2 text-gray-500 text-[clamp(0.875rem,2vw,1rem)]">
           <MessageCircle size={20} />
           <span>투표 후 댓글을 작성할 수 있습니다</span>
         </div>
@@ -109,46 +109,42 @@ export function CommentSection({ questionId, voted, isAdmin = false }: CommentSe
       {/* Collapsible Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full hover:bg-gray-50 transition-colors rounded-md"
-        style={{ padding: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+        className="w-full hover:bg-gray-50 transition-colors rounded-md p-5 flex items-center justify-between"
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#374151' }}>
+        <div className="flex items-center gap-2 text-gray-700">
           <MessageCircle size={20} />
-          <span style={{ fontWeight: 500, fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>댓글 {comments.length}</span>
+          <span className="font-medium text-[clamp(0.875rem,2vw,1rem)]">댓글 {comments.length}</span>
         </div>
         {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
       </button>
 
       {/* Expanded Content */}
       {isExpanded && (
-        <div style={{ padding: '0 20px 24px', borderTop: '1px solid #f3f4f6' }}>
-          <form onSubmit={handleSubmit} style={{ marginTop: '24px', marginBottom: '32px' }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
+        <div className="px-5 pb-6 border-t border-gray-100">
+          <form onSubmit={handleSubmit} className="mt-6 mb-8">
+            <div className="flex gap-2 mb-3 flex-wrap">
               <input
                 type="text"
                 value={authorName}
                 onChange={(e) => setAuthorName(e.target.value)}
                 placeholder="닉네임"
-                className="border border-gray-300 text-black bg-white focus:outline-none focus:ring-2 focus:ring-black rounded-md"
-                style={{ padding: '10px 16px', width: 'clamp(120px, 30%, 160px)', fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+                className="border border-gray-300 text-black bg-white focus:outline-none focus:ring-2 focus:ring-black rounded-md px-4 py-2.5 w-[clamp(120px,30%,160px)] text-[clamp(0.875rem,2vw,1rem)]"
               />
             </div>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <div className="flex gap-2 flex-wrap">
               <input
                 type="text"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="댓글을 입력하세요"
-                className="border border-gray-300 text-black bg-white focus:outline-none focus:ring-2 focus:ring-black rounded-md"
-                style={{ flex: '1 1 200px', padding: '10px 16px', fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+                className="border border-gray-300 text-black bg-white focus:outline-none focus:ring-2 focus:ring-black rounded-md flex-[1_1_200px] px-4 py-2.5 text-[clamp(0.875rem,2vw,1rem)]"
                 disabled={commentMutation.isPending}
                 ref={inputRef}
               />
               <button
                 type="submit"
                 disabled={commentMutation.isPending || !content.trim()}
-                className="border-2 border-black bg-black text-white rounded-md hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-                style={{ padding: '10px clamp(24px, 6vw, 32px)', fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+                className="border-2 border-black bg-black text-white rounded-md hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium py-2.5 px-[clamp(24px,6vw,32px)] text-[clamp(0.875rem,2vw,1rem)]"
               >
                 작성
               </button>
@@ -156,41 +152,35 @@ export function CommentSection({ questionId, voted, isAdmin = false }: CommentSe
           </form>
 
           {loading ? (
-            <div style={{ color: '#6b7280', padding: '16px 0' }}>로딩 중...</div>
+            <div className="text-gray-500 py-4">로딩 중...</div>
           ) : comments.length === 0 ? (
-            <div style={{ color: '#6b7280', padding: '16px 0' }}>첫 댓글을 작성해보세요!</div>
+            <div className="text-gray-500 py-4">첫 댓글을 작성해보세요!</div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div className="flex flex-col gap-5">
               {comments.map((comment) => (
                 <div 
                   key={comment.id} 
-                  style={{ 
-                    borderTop: '1px solid #f3f4f6', 
-                    paddingTop: '20px',
-                    position: 'relative',
-                  }}
-                  className="first:border-0 first:pt-0"
+                  className="first:border-0 first:pt-0 border-t border-gray-100 pt-5 relative"
                 >
                   {/* Admin Delete Button */}
                   {isAdmin && (
                     <button
                       onClick={() => handleDeleteComment(comment.id)}
                       disabled={deletingCommentId === comment.id}
-                      className="hover:bg-red-100 transition-colors rounded-md disabled:opacity-50"
-                      style={{ position: 'absolute', top: '20px', right: '0', padding: '4px', color: '#dc2626' }}
+                      className="hover:bg-red-100 transition-colors rounded-md disabled:opacity-50 absolute top-5 right-0 p-1 text-red-600"
                       title="댓글 삭제"
                     >
                       <X size={16} />
                     </button>
                   )}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap', paddingRight: isAdmin ? '32px' : '0' }}>
-                    <span style={{ fontWeight: 600, color: 'black', fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
+                  <div className={`flex items-center gap-2 mb-2 flex-wrap ${isAdmin ? 'pr-8' : ''}`}>
+                    <span className="font-semibold text-black text-[clamp(0.875rem,2vw,1rem)]">
                       {comment.author_name}
                     </span>
-                    <span style={{ fontSize: 'clamp(10px, 1.5vw, 12px)', padding: '4px 8px', backgroundColor: '#f3f4f6', color: '#374151', borderRadius: '4px', fontWeight: 500 }}>
+                    <span className="text-[clamp(10px,1.5vw,12px)] px-2 py-1 bg-gray-100 text-gray-700 rounded font-medium">
                       {comment.chosen_option.toUpperCase()}
                     </span>
-                    <span style={{ fontSize: 'clamp(10px, 1.5vw, 12px)', color: '#9ca3af' }}>
+                    <span className="text-[clamp(10px,1.5vw,12px)] text-gray-400">
                       {new Date(comment.created_at).toLocaleString('ko-KR', {
                         month: 'short',
                         day: 'numeric',
@@ -199,7 +189,7 @@ export function CommentSection({ questionId, voted, isAdmin = false }: CommentSe
                       })}
                     </span>
                   </div>
-                  <p style={{ color: 'black', lineHeight: '1.6', fontSize: 'clamp(0.875rem, 2vw, 1rem)', wordBreak: 'break-word', paddingRight: isAdmin ? '32px' : '0' }}>
+                  <p className={`text-black leading-relaxed text-[clamp(0.875rem,2vw,1rem)] break-words ${isAdmin ? 'pr-8' : ''}`}>
                     {comment.content}
                   </p>
                 </div>

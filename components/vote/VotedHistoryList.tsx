@@ -22,32 +22,17 @@ export function VotedHistoryList({ votedQuestions }: VotedHistoryListProps) {
   const hasMore = votedQuestions.length > 3
 
   return (
-    <div style={{ marginTop: '48px', width: '100%' }}>
+
+    <div className="mt-12 w-full">
       {/* Section Header */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '24px',
-          paddingBottom: '12px',
-          borderBottom: '1px solid #e5e7eb'
-        }}
-      >
-        <h2
-          style={{
-            fontSize: 'clamp(1.125rem, 3vw, 1.5rem)',
-            fontWeight: 600,
-            color: '#111827',
-            margin: 0
-          }}
-        >
+      <div className="flex items-center justify-between mb-6 pb-3 border-b border-gray-200">
+        <h2 className="text-[clamp(1.125rem,3vw,1.5rem)] font-semibold text-gray-900 m-0">
           투표한 질문 ({votedQuestions.length})
         </h2>
       </div>
 
       {/* Voted Cards List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div className="flex flex-col gap-6">
         <AnimatePresence mode="popLayout">
           {displayQuestions.map((question, index) => (
             <motion.div
@@ -73,27 +58,11 @@ export function VotedHistoryList({ votedQuestions }: VotedHistoryListProps) {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          style={{
-            marginTop: '24px',
-            textAlign: 'center'
-          }}
+          className="mt-6 text-center"
         >
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '12px 24px',
-              fontSize: '14px',
-              color: '#6b7280',
-              background: 'transparent',
-              border: '1px solid #e5e7eb',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-            className="hover:bg-gray-50"
+            className="inline-flex items-center gap-1 px-6 py-3 text-sm text-gray-500 bg-transparent border border-gray-200 rounded-lg cursor-pointer transition-all hover:bg-gray-50"
           >
             {isExpanded ? (
               <>
