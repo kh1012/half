@@ -12,7 +12,6 @@ import { AllClear } from '@/components/vote/AllClear'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAnonymousUser } from '@/hooks/useAnonymousUser'
 import { queryKeys } from '@/lib/queryKeys'
-import { generateQuestion } from '@/app/actions/generate-question'
 
 export default function Home() {
   const { data: questions = [], isLoading } = useQuestions()
@@ -26,7 +25,6 @@ export default function Home() {
     recordPass 
   } = useAnonymousUser()
   const queryClient = useQueryClient()
-  const [isGenerating, setIsGenerating] = useState(false)
 
   const handleNicknameSubmit = async (nickname: string) => {
     await updateNickname(nickname)
@@ -101,22 +99,6 @@ export default function Home() {
     ])
   }
 
-  const handleGenerateNew = async () => {
-    setIsGenerating(true)
-    try {
-      const result = await generateQuestion()
-      if (result.success && result.question) {
-        handleQuestionGenerated(result.question)
-      } else {
-        alert(result.error || '질문 생성에 실패했습니다')
-      }
-    } catch (error) {
-      console.error('Failed to generate question:', error)
-      alert('질문 생성 중 오류가 발생했습니다')
-    } finally {
-      setIsGenerating(false)
-    }
-  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center">
@@ -169,8 +151,7 @@ export default function Home() {
                   />
                 ) : (
                   <AllClear 
-                    onGenerateNew={handleGenerateNew}
-                    isGenerating={isGenerating}
+                    onQuestionCreated={handleQuestionGenerated}
                   />
                 )}
               </div>

@@ -58,6 +58,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteUrl,
   },
+  verification: {
+    google: 'Xr_DuBc_1lFVrHYQqVWTgxUb_7hJuTaU2Kp485rfXzQ',
+  },
 };
 
 export default function RootLayout({

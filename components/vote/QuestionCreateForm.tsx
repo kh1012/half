@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Send, X } from 'lucide-react'
+import { Plus, X, Sparkles } from 'lucide-react'
 import { createUserQuestion } from '@/app/actions/create-user-question'
+import { generateQuestion } from '@/app/actions/generate-question'
 import { Question } from '@/lib/types'
 
 interface QuestionCreateFormProps {
@@ -16,6 +17,7 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
   const [optionA, setOptionA] = useState('')
   const [optionB, setOptionB] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   // Close modal on Escape key
@@ -63,14 +65,42 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
     }
   }
 
+  const handleAIGenerate = async () => {
+    if (isGeneratingAI || isSubmitting) return
+
+    setError(null)
+    setIsGeneratingAI(true)
+
+    try {
+      const result = await generateQuestion()
+      
+      if (result.success && result.question) {
+        // Auto-fill the form fields with AI generated content
+        setTitle(result.question.title)
+        setOptionA(result.question.option_a)
+        setOptionB(result.question.option_b)
+      } else {
+        setError(result.error || 'AI 질문 생성에 실패했습니다')
+      }
+    } catch {
+      setError('AI 질문 생성 중 오류가 발생했습니다')
+    } finally {
+      setIsGeneratingAI(false)
+    }
+  }
+
   const handleClose = () => {
-    if (!isSubmitting) {
+    if (!isSubmitting && !isGeneratingAI) {
       setIsOpen(false)
       setError(null)
+      setTitle('')
+      setOptionA('')
+      setOptionB('')
     }
   }
 
   const isValid = title.trim() && optionA.trim() && optionB.trim()
+  const isLoading = isSubmitting || isGeneratingAI
 
   return (
     <>
@@ -110,7 +140,7 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
                 </h2>
                 <button
                   onClick={handleClose}
-                  disabled={isSubmitting}
+                  disabled={isLoading}
                   className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   <X size={20} />
@@ -120,16 +150,41 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
               {/* Form */}
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label className="block text-[13px] font-medium text-gray-700 mb-1.5">
-                    질문
-                  </label>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label className="block text-[13px] font-medium text-gray-700">
+                      질문
+                    </label>
+                    {/* AI Generate Button */}
+                    <motion.button
+                      type="button"
+                      onClick={handleAIGenerate}
+                      disabled={isLoading}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full transition-all ${isLoading ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'}`}
+                      title="AI가 질문을 자동으로 생성합니다"
+                    >
+                      {isGeneratingAI ? (
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        >
+                          <Sparkles size={12} />
+                        </motion.div>
+                      ) : (
+                        <Sparkles size={12} />
+                      )}
+                      {isGeneratingAI ? 'AI 생성 중...' : 'AI 자동완성'}
+                    </motion.button>
+                  </div>
                   <textarea
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="사람들에게 물어볼 질문을 입력하세요"
                     maxLength={200}
                     autoFocus
-                    className="w-full p-3 border border-gray-200 rounded-lg text-sm resize-none min-h-[100px] font-inherit transition-colors focus:border-gray-400 focus:outline-none"
+                    disabled={isLoading}
+                    className="w-full p-3 border border-gray-200 rounded-lg text-sm resize-none min-h-[100px] font-inherit transition-colors focus:border-gray-400 focus:outline-none disabled:bg-gray-50 disabled:text-gray-500"
                   />
                   <div className="text-[11px] text-gray-400 text-right mt-1">
                     {title.length}/200
@@ -147,7 +202,8 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
                       onChange={(e) => setOptionA(e.target.value)}
                       placeholder="선택 1"
                       maxLength={50}
-                      className="flex-1 p-3 border border-gray-200 rounded-lg text-sm transition-colors focus:border-gray-400 focus:outline-none"
+                      disabled={isLoading}
+                      className="flex-1 p-3 border border-gray-200 rounded-lg text-sm transition-colors focus:border-gray-400 focus:outline-none disabled:bg-gray-50 disabled:text-gray-500"
                     />
                     <input
                       type="text"
@@ -155,7 +211,8 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
                       onChange={(e) => setOptionB(e.target.value)}
                       placeholder="선택 2"
                       maxLength={50}
-                      className="flex-1 p-3 border border-gray-200 rounded-lg text-sm transition-colors focus:border-gray-400 focus:outline-none"
+                      disabled={isLoading}
+                      className="flex-1 p-3 border border-gray-200 rounded-lg text-sm transition-colors focus:border-gray-400 focus:outline-none disabled:bg-gray-50 disabled:text-gray-500"
                     />
                   </div>
                 </div>
@@ -170,8 +227,8 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
 
                 <button
                   type="submit"
-                  disabled={!isValid || isSubmitting}
-                  className={`w-full p-3.5 rounded-lg text-[15px] font-medium flex items-center justify-center gap-2 transition-all ${isValid && !isSubmitting ? 'bg-black text-white hover:bg-gray-800' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
+                  disabled={!isValid || isLoading}
+                  className={`w-full p-3.5 rounded-lg text-[15px] font-medium flex items-center justify-center gap-2 transition-all ${isValid && !isLoading ? 'bg-black text-white hover:bg-gray-800' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
                 >
                   {isSubmitting ? (
                     '생성 중...'
@@ -188,6 +245,5 @@ export function QuestionCreateForm({ onQuestionCreated }: QuestionCreateFormProp
       </AnimatePresence>
     </>
   )
-
 }
 
